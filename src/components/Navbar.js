@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import Cart from './Cart';
 
 export default function Navbar() {
   return (
@@ -21,6 +24,7 @@ export default function Navbar() {
             <Link href="/" className="text-gray-700 hover:text-red-600 font-medium transition-colors">
               Products
             </Link>
+            <Cart />
           </div>
         </div>
       </div>

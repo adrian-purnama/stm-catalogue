@@ -59,3 +59,31 @@ export async function getCatalogueById(id) {
     return null;
   }
 }
+
+export async function submitPriceInquiry(data) {
+  try {
+    const res = await fetch(`${API_URL}/catalogues/price-inquiry`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.message || 'Failed to submit price inquiry');
+    }
+    
+    const result = await res.json();
+    
+    if (result.success) {
+      return { success: true, message: result.message };
+    }
+    
+    throw new Error(result.message || 'Failed to submit price inquiry');
+  } catch (error) {
+    console.error('Error submitting price inquiry:', error);
+    throw error;
+  }
+}

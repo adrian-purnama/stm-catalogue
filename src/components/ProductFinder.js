@@ -1,8 +1,22 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { useCart } from '@/context/CartContext';
+import { ShoppingCart } from 'lucide-react';
+import AskForPriceModal from './AskForPriceModal';
 
 export default function ProductFinder({ catalogue, variants }) {
+  const { addToCart } = useCart();
+  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [showPriceModal, setShowPriceModal] = useState(false);
+  const [addedItemId, setAddedItemId] = useState(null);
+
+  const handleAddToCart = (variant) => {
+    addToCart(catalogue, variant);
+    const itemId = variant?.combinationId || `catalogue-${catalogue._id}`;
+    setAddedItemId(itemId);
+    setTimeout(() => setAddedItemId(null), 1000);
+  };
   // Extract unique chassis options
   const chassisOptions = useMemo(() => {
     const chassisMap = new Map();
@@ -262,6 +276,7 @@ export default function ProductFinder({ catalogue, variants }) {
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Variants</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                   <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -302,6 +317,41 @@ export default function ProductFinder({ catalogue, variants }) {
                           </span>
                         )}
                       </td>
+                      <td className="px-4 py-4 whitespace-nowrap text-center">
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAddToCart(variant);
+                            }}
+                            className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-300 ${
+                              addedItemId === (variant?.combinationId || `catalogue-${catalogue._id}`)
+                                ? 'bg-green-500 text-white scale-110'
+                                : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
+                            }`}
+                            title="Add to cart"
+                          >
+                            <ShoppingCart 
+                              className={`h-3 w-3 mr-1 transition-transform duration-300 ${
+                                addedItemId === (variant?.combinationId || `catalogue-${catalogue._id}`)
+                                  ? 'rotate-12 scale-125'
+                                  : ''
+                              }`} 
+                            />
+                            {addedItemId === (variant?.combinationId || `catalogue-${catalogue._id}`) ? 'Added!' : 'Add'}
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedVariant(variant);
+                              setShowPriceModal(true);
+                            }}
+                            className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+                          >
+                            Ask for Price
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   );
                 })}
@@ -320,6 +370,17 @@ export default function ProductFinder({ catalogue, variants }) {
           </button>
         </div>
       )}
+
+      {/* Ask for Price Modal */}
+      <AskForPriceModal
+        isOpen={showPriceModal}
+        onClose={() => {
+          setShowPriceModal(false);
+          setSelectedVariant(null);
+        }}
+        catalogue={catalogue}
+        variant={selectedVariant}
+      />
     </div>
   );
 }
