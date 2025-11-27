@@ -1,24 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Catalogue Viewer
+
+A Next.js-based online shop interface for browsing and viewing product catalogues with images and variants.
+
+## Features
+
+- 🖼️ **Image Gallery**: Display front images and carousel images for each product
+- 📦 **Product Grid**: Browse all body types in a responsive grid layout
+- 🔍 **Product Details**: View all available configurations, sizes, chassis, and variants
+- 🎨 **Modern UI**: Clean, minimal design with Tailwind CSS
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+ installed
+- Backend API running (default: http://localhost:5000)
+
+### Installation
+
+1. Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Configure the API URL (optional):
+   - Create a `.env.local` file in the root directory
+   - Add: `NEXT_PUBLIC_API_URL=http://localhost:5000/api`
+   - If not set, it defaults to `http://localhost:5000/api`
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+3. Run the development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Configuration
+
+The app connects to the backend API to fetch catalogue data. Make sure your backend is running and accessible at the configured URL.
+
+### Environment Variables
+
+- `NEXT_PUBLIC_API_URL`: Backend API base URL (default: `http://localhost:5000/api`)
+
+## Project Structure
+
+- `src/app/` - Next.js app router pages
+- `src/components/` - React components (CatalogueCard, CatalogueGrid, ImageCarousel, Navbar)
+- `src/lib/` - API utilities and helpers
 
 ## Learn More
 
