@@ -77,6 +77,31 @@ export default function HomeClient({ initialCatalogues }) {
               </div>
             )}
             <CatalogueGrid catalogues={allFilteredCatalogues} />
+            
+            {/* Other Gallery Link Section - Only show when not searching */}
+            {!searchTerm && (
+              <div className="mt-16 text-center">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                    Explore More
+                  </h3>
+                  <p className="text-gray-600 mb-6">
+                    Discover our complete range of vehicle body types and configurations
+                  </p>
+                  <a
+                    href="https://www.karoseriasb.com/karoseri-kendaraan/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium shadow-sm hover:shadow-md"
+                  >
+                    <span>Look at our other gallery</span>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         ) : searchTerm ? (
           <div className="text-center py-16">

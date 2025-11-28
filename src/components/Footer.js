@@ -129,6 +129,14 @@ export default function Footer() {
               >
                 Products
               </Link>
+              <a
+                href="https://www.karoseriasb.com/karoseri-kendaraan/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-sm text-gray-400 hover:text-red-600 transition-colors"
+              >
+                Look at our other gallery
+              </a>
               <button
                 onClick={() => {
                   // Scroll to top or trigger contact CTA
