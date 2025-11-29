@@ -267,7 +267,7 @@ export default function ProductFinder({ catalogue, variants }) {
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-xl font-bold text-gray-900">Available Configurations</h2>
           </div>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto relative">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -276,7 +276,7 @@ export default function ProductFinder({ catalogue, variants }) {
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Variants</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                   <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider sticky right-0 bg-gray-50 z-10">Action</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -287,7 +287,7 @@ export default function ProductFinder({ catalogue, variants }) {
                   const variantEntries = Object.entries(variantSelections);
                   
                   return (
-                    <tr key={variant.combinationId || index} className="hover:bg-gray-50">
+                    <tr key={variant.combinationId || index} className="group hover:bg-gray-50">
                       <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                         {sizeLabel}
                       </td>
@@ -317,7 +317,7 @@ export default function ProductFinder({ catalogue, variants }) {
                           </span>
                         )}
                       </td>
-                      <td className="px-4 py-4 whitespace-nowrap text-center">
+                      <td className="px-4 py-4 whitespace-nowrap text-center sticky right-0 bg-white group-hover:bg-gray-50 z-10">
                         <div className="flex items-center justify-center gap-2">
                           <button
                             onClick={(e) => {
@@ -338,7 +338,8 @@ export default function ProductFinder({ catalogue, variants }) {
                                   : ''
                               }`} 
                             />
-                            {addedItemId === (variant?.combinationId || `catalogue-${catalogue._id}`) ? 'Added!' : 'Add'}
+                            <span className="hidden sm:inline">{addedItemId === (variant?.combinationId || `catalogue-${catalogue._id}`) ? 'Added!' : 'Add'}</span>
+                            <span className="sm:hidden">{addedItemId === (variant?.combinationId || `catalogue-${catalogue._id}`) ? '✓' : '+'}</span>
                           </button>
                           <button
                             onClick={(e) => {
@@ -346,9 +347,10 @@ export default function ProductFinder({ catalogue, variants }) {
                               setSelectedVariant(variant);
                               setShowPriceModal(true);
                             }}
-                            className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+                            className="inline-flex items-center px-2 sm:px-3 py-1.5 text-xs font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors whitespace-nowrap"
                           >
-                            Ask for Price
+                            <span className="hidden sm:inline">Ask for Price</span>
+                            <span className="sm:hidden">Price</span>
                           </button>
                         </div>
                       </td>
