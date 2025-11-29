@@ -81,7 +81,7 @@ export default function Cart() {
               className="fixed inset-0 z-40"
               onClick={() => setIsOpen(false)}
             />
-            <div className="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[80vh] overflow-hidden flex flex-col">
+            <div className="fixed sm:absolute top-20 sm:top-auto right-2 sm:right-0 mt-0 sm:mt-2 w-[calc(100vw-1rem)] max-w-96 sm:w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[calc(100vh-6rem)] sm:max-h-[80vh] overflow-hidden flex flex-col">
               <div className="p-4 border-b border-gray-200 flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Price Inquiry Cart ({cartItems.length})

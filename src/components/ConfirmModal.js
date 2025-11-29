@@ -18,7 +18,7 @@ export default function ConfirmModal({ isOpen, onClose, onConfirm, title, messag
       }}
     >
       {/* Background overlay */}
-      <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity -z-10"></div>
+      <div className="fixed inset-0 bg-black/50 transition-opacity -z-10"></div>
 
       {/* Modal panel */}
       <div
@@ -66,6 +66,7 @@ export default function ConfirmModal({ isOpen, onClose, onConfirm, title, messag
     </div>
   );
 }
+
 
 
 
