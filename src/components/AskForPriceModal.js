@@ -170,7 +170,12 @@ export default function AskForPriceModal({ isOpen, onClose, catalogue, variant, 
     }
   };
 
-  const handleClose = () => {
+  const handleClose = (e) => {
+    // Prevent event propagation to avoid triggering parent click handlers
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setSuccess(false);
     setError('');
     // Don't clear form data, keep saved values for next time
@@ -179,7 +184,12 @@ export default function AskForPriceModal({ isOpen, onClose, catalogue, variant, 
       ...prev,
       message: ''
     }));
-    onClose();
+    // Call onClose with event to prevent propagation
+    if (e) {
+      onClose(e);
+    } else {
+      onClose();
+    }
   };
 
   // Character counter (100 characters limit)
@@ -291,7 +301,9 @@ export default function AskForPriceModal({ isOpen, onClose, catalogue, variant, 
       onClick={(e) => {
         // Close modal if clicking on backdrop
         if (e.target === e.currentTarget) {
-          handleClose();
+          e.preventDefault();
+          e.stopPropagation();
+          handleClose(e);
         }
       }}
     >
