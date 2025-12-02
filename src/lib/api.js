@@ -1,5 +1,5 @@
 //const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://uat-stm-portal-be.stm-asb.co.id/api';
-const API_URL = 'https://uat-stm-portal-be.stm-asb.co.id/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function getCatalogues(page = 1, limit = 100, search = '') {
   try {
