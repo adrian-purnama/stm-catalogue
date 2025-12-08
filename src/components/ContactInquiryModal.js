@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { X, Loader2, Mail } from 'lucide-react';
 
 //const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const API_URL = 'https://uat-stm-portal-be.stm-asb.co.id/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export default function ContactInquiryModal({ isOpen, onClose }) {
   const [inquiryType, setInquiryType] = useState('personal'); // 'personal' or 'company'
