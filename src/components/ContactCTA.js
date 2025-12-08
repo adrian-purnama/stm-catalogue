@@ -6,7 +6,7 @@ import ContactInquiryModal from './ContactInquiryModal';
 
 //const API_URL = process.env.NEXT_PUBLIC_API_URL;
 //const API_URL = process.env.NEXT_PUBLIC_API_URL
-const API_URL = process.env.NEXT_PUBLIC_API_URL
+const API_URL = "https://stm-portal-be.stm-asb.co.id/api"
 
 export default function ContactCTA() {
   const [isOpen, setIsOpen] = useState(false);
