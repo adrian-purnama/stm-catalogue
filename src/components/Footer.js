@@ -5,9 +5,7 @@ import Link from 'next/link';
 import { Mail, Phone, MapPin, Globe, Building2 } from 'lucide-react';
 import ContactInquiryModal from './ContactInquiryModal';
 
-//const API_URL = process.env.NEXT_PUBLIC_API_URL;
-//const API_URL = process.env.NEXT_PUBLIC_API_URL
-const API_URL = "https://be-stm-portal.stm-asb.co.id/api"
+import { API_URL } from '../lib/config';
 
 export default function Footer() {
   const [company, setCompany] = useState(null);

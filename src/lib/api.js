@@ -1,10 +1,12 @@
-//const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://uat-stm-portal-be.stm-asb.co.id/api';
-//const API_URL = process.env.NEXT_PUBLIC_API_URL;
-//const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const API_URL = "https://be-stm-portal.stm-asb.co.id/api"
+import { API_URL } from './config';
 
-export async function getCatalogues(page = 1, limit = 100, search = '') {
+export async function getCatalogues(page = 1, limit = 100, search = '', sessionToken = null) {
   try {
+    // Session token is required
+    if (!sessionToken) {
+      throw new Error('Session token is required');
+    }
+
     const params = new URLSearchParams({
       page: page.toString(),
       limit: limit.toString(),
@@ -14,12 +16,19 @@ export async function getCatalogues(page = 1, limit = 100, search = '') {
       params.append('search', search);
     }
     
+    params.append('session', sessionToken);
+    
     const res = await fetch(`${API_URL}/catalogues?${params.toString()}`, {
       cache: 'no-store',
     });
     
     if (!res.ok) {
-      throw new Error('Failed to fetch catalogues');
+      if (res.status === 401) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Invalid or expired session token');
+      }
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.message || 'Failed to fetch catalogues');
     }
     
     const result = await res.json();
@@ -39,14 +48,29 @@ export async function getCatalogues(page = 1, limit = 100, search = '') {
   }
 }
 
-export async function getCatalogueById(id) {
+export async function getCatalogueById(id, sessionToken = null) {
   try {
-    const res = await fetch(`${API_URL}/catalogues/${id}`, {
+    // Session token is required
+    if (!sessionToken) {
+      throw new Error('Session token is required');
+    }
+
+    const params = new URLSearchParams();
+    params.append('session', sessionToken);
+    
+    const url = `${API_URL}/catalogues/${id}?${params.toString()}`;
+    
+    const res = await fetch(url, {
       cache: 'no-store',
     });
     
     if (!res.ok) {
-      throw new Error('Failed to fetch catalogue');
+      if (res.status === 401) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Invalid or expired session token');
+      }
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.message || 'Failed to fetch catalogue');
     }
     
     const result = await res.json();
@@ -63,9 +87,19 @@ export async function getCatalogueById(id) {
   }
 }
 
-export async function submitPriceInquiry(data) {
+export async function submitPriceInquiry(data, sessionToken = null) {
   try {
-    const res = await fetch(`${API_URL}/catalogues/price-inquiry`, {
+    // Session token is required
+    if (!sessionToken) {
+      throw new Error('Session token is required');
+    }
+
+    const params = new URLSearchParams();
+    params.append('session', sessionToken);
+    
+    const url = `${API_URL}/catalogues/price-inquiry?${params.toString()}`;
+    
+    const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -74,8 +108,12 @@ export async function submitPriceInquiry(data) {
     });
     
     if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.message || 'Failed to submit price inquiry');
+      if (res.status === 401) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Invalid or expired session token');
+      }
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.message || 'Failed to submit price inquiry');
     }
     
     const result = await res.json();

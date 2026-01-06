@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { X, Loader2 } from 'lucide-react';
 import { submitPriceInquiry } from '@/lib/api';
 import { useCart } from '@/context/CartContext';
+import { getSessionToken, clearSessionToken } from '@/lib/sessionStorage';
+import SessionErrorModal from './SessionErrorModal';
 
 export default function AskForPriceModal({ isOpen, onClose, catalogue, variant, cartItems }) {
   const { clearCart } = useCart();
@@ -52,6 +54,8 @@ export default function AskForPriceModal({ isOpen, onClose, catalogue, variant, 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [showSessionErrorModal, setShowSessionErrorModal] = useState(false);
+  const [sessionErrorMessage, setSessionErrorMessage] = useState('');
 
   // Load saved customer info when modal opens
   useEffect(() => {
@@ -126,6 +130,9 @@ export default function AskForPriceModal({ isOpen, onClose, catalogue, variant, 
             quantity: 1
           }];
 
+      // Get session token
+      const sessionToken = getSessionToken();
+      
       await submitPriceInquiry({
         items, // Array of items for bundle inquiry
         inquiryType,
@@ -135,7 +142,7 @@ export default function AskForPriceModal({ isOpen, onClose, catalogue, variant, 
         email: formData.email.trim(),
         phone: formData.phone.trim(),
         message: formData.message.trim()
-      });
+      }, sessionToken);
 
       // Save customer info to localStorage for future use
       try {
@@ -164,7 +171,13 @@ export default function AskForPriceModal({ isOpen, onClose, catalogue, variant, 
         handleClose();
       }, 2000);
     } catch (err) {
-      setError(err.message || 'Failed to submit inquiry. Please try again.');
+      if (err.message?.includes('session token') || err.message?.includes('Session token')) {
+        setSessionErrorMessage(err.message);
+        setShowSessionErrorModal(true);
+        clearSessionToken();
+      } else {
+        setError(err.message || 'Failed to submit inquiry. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -293,20 +306,26 @@ export default function AskForPriceModal({ isOpen, onClose, catalogue, variant, 
   ) : null;
 
   return (
-    <div 
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4" 
-      aria-labelledby="modal-title" 
-      role="dialog" 
-      aria-modal="true"
-      onClick={(e) => {
-        // Close modal if clicking on backdrop
-        if (e.target === e.currentTarget) {
-          e.preventDefault();
-          e.stopPropagation();
-          handleClose(e);
-        }
-      }}
-    >
+    <>
+      <SessionErrorModal
+        isOpen={showSessionErrorModal}
+        onClose={() => setShowSessionErrorModal(false)}
+        errorMessage={sessionErrorMessage}
+      />
+      <div 
+        className="fixed inset-0 z-[100] flex items-center justify-center p-4" 
+        aria-labelledby="modal-title" 
+        role="dialog" 
+        aria-modal="true"
+        onClick={(e) => {
+          // Close modal if clicking on backdrop
+          if (e.target === e.currentTarget) {
+            e.preventDefault();
+            e.stopPropagation();
+            handleClose(e);
+          }
+        }}
+      >
       {/* Background overlay */}
       <div 
         className="fixed inset-0 bg-black/50 bg-opacity-75 transition-opacity -z-10"
@@ -535,7 +554,8 @@ export default function AskForPriceModal({ isOpen, onClose, catalogue, variant, 
             )}
           </div>
         </div>
-    </div>
+      </div>
+    </>
   );
 }
 

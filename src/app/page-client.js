@@ -1,11 +1,26 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import CatalogueGrid from '@/components/CatalogueGrid';
 import HeroSection from '@/components/HeroSection';
 import { useSearchableCatalogues } from '@/components/SearchableCatalogueGrid';
+import { getSessionToken, clearSessionToken } from '@/lib/sessionStorage';
+import SessionErrorModal from '@/components/SessionErrorModal';
 
-export default function HomeClient({ initialCatalogues }) {
+export default function HomeClient({ initialCatalogues, sessionToken: initialSessionToken, sessionError: initialError }) {
+  const [sessionError, setSessionError] = useState(initialError || null);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  
+  useEffect(() => {
+    // If we got a session token from URL, it's already stored by sessionStorage.js
+    // Check if we have a session error
+    if (initialError) {
+      setSessionError(initialError);
+      setShowErrorModal(true);
+      // Clear invalid token
+      clearSessionToken();
+    }
+  }, [initialError]);
   const [searchTerm, setSearchTerm] = useState('');
   
   // Separate featured and regular products
@@ -23,10 +38,34 @@ export default function HomeClient({ initialCatalogues }) {
   };
   
   return (
-    <div className="min-h-screen bg-gray-50">
-      <HeroSection onSearch={handleSearch} searchTerm={searchTerm} />
-      
-      <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+    <>
+      {/* Session Error Modal */}
+      <SessionErrorModal
+        isOpen={showErrorModal}
+        onClose={() => setShowErrorModal(false)}
+        errorMessage={sessionError}
+      />
+
+      {/* Show empty state if there's a session error */}
+      {sessionError && !showErrorModal && (
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <button
+              onClick={() => setShowErrorModal(true)}
+              className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+            >
+              View Error Details
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content - only show if no error */}
+      {!sessionError && (
+        <div className="min-h-screen bg-gray-50">
+          <HeroSection onSearch={handleSearch} searchTerm={searchTerm} />
+          
+          <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
         {/* Search Results Header */}
         {searchTerm && (
           <div className="mb-6">
@@ -125,9 +164,11 @@ export default function HomeClient({ initialCatalogues }) {
             <h3 className="mt-4 text-lg font-medium text-gray-900">No products available</h3>
             <p className="mt-2 text-gray-500">Check back later for new products.</p>
           </div>
-        )}
-      </div>
-    </div>
+          )}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

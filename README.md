@@ -23,10 +23,18 @@ A Next.js-based online shop interface for browsing and viewing product catalogue
 npm install
 ```
 
-2. Configure the API URL (optional):
-   - Create a `.env.local` file in the root directory
-   - Add: `NEXT_PUBLIC_API_URL=http://localhost:5000/api`
+2. Configure environment variables:
+   - Create a `.env.local` file in the root directory (copy from `.env.example` if available)
+   - Add your configuration:
+     ```
+     NEXT_PUBLIC_API_URL=http://localhost:5000/api
+     ```
+   - For production, use your production API URL:
+     ```
+     NEXT_PUBLIC_API_URL=https://be-stm-portal.stm-asb.co.id/api
+     ```
    - If not set, it defaults to `http://localhost:5000/api`
+   - **Note**: All environment variables prefixed with `NEXT_PUBLIC_` are exposed to the browser
 
 3. Run the development server:
 ```bash
@@ -41,7 +49,22 @@ The app connects to the backend API to fetch catalogue data. Make sure your back
 
 ### Environment Variables
 
+The project uses `dotenv` for environment variable management. Create a `.env.local` file in the root directory to configure your environment.
+
+**Available Variables:**
+
 - `NEXT_PUBLIC_API_URL`: Backend API base URL (default: `http://localhost:5000/api`)
+  - This is the base URL for all API calls
+  - Must include the `/api` path if your backend serves API routes under that path
+  - Example values:
+    - Development: `http://localhost:5000/api`
+    - Production: `https://be-stm-portal.stm-asb.co.id/api`
+
+**Important Notes:**
+- Variables prefixed with `NEXT_PUBLIC_` are exposed to the browser
+- Use `.env.local` for local development (this file is gitignored)
+- Never commit `.env.local` or `.env` files with sensitive data
+- The configuration is centralized in `src/lib/config.js` for easy management
 
 ## Project Structure
 

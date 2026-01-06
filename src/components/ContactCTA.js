@@ -4,9 +4,7 @@ import { useState, useEffect } from 'react';
 import { MessageSquare, Mail, X, Phone } from 'lucide-react';
 import ContactInquiryModal from './ContactInquiryModal';
 
-//const API_URL = process.env.NEXT_PUBLIC_API_URL;
-//const API_URL = process.env.NEXT_PUBLIC_API_URL
-const API_URL = "https://be-stm-portal.stm-asb.co.id/api"
+import { API_URL } from '../lib/config';
 
 export default function ContactCTA() {
   const [isOpen, setIsOpen] = useState(false);
