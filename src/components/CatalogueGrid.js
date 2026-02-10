@@ -1,6 +1,6 @@
 import CatalogueCard from './CatalogueCard';
 
-export default function CatalogueGrid({ catalogues }) {
+export default function CatalogueGrid({ catalogues, sessionToken }) {
   if (!catalogues || catalogues.length === 0) {
     return (
       <div className="text-center py-12">
@@ -12,7 +12,7 @@ export default function CatalogueGrid({ catalogues }) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {catalogues.map((catalogue) => (
-        <CatalogueCard key={catalogue._id} catalogue={catalogue} />
+        <CatalogueCard key={catalogue._id} catalogue={catalogue} sessionToken={sessionToken} />
       ))}
     </div>
   );

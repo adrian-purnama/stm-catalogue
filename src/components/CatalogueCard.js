@@ -5,8 +5,12 @@ import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { ShoppingCart } from 'lucide-react';
 import AskForPriceModal from './AskForPriceModal';
+import { getSessionToken } from '@/lib/sessionStorage';
 
-export default function CatalogueCard({ catalogue }) {
+export default function CatalogueCard({ catalogue, sessionToken: sessionTokenProp }) {
+  // Use prop from server when available, otherwise fall back to client storage (e.g. after client nav)
+  const sessionFromStorage = getSessionToken();
+  const sessionToken = sessionTokenProp ?? sessionFromStorage;
   const { addToCart } = useCart();
   // Find the first available price that is not 'ask'
   // Check all items in shopCatalogue to find one with an actual price
@@ -50,7 +54,7 @@ export default function CatalogueCard({ catalogue }) {
   return (
     <>
       <Link 
-        href={`/product/${catalogue._id}`} 
+        href={sessionToken ? `/product/${catalogue._id}?session=${sessionToken}` : `/product/${catalogue._id}`} 
         className="group h-full flex"
         onClick={(e) => {
           // Prevent navigation if modal is open

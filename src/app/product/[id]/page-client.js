@@ -5,11 +5,13 @@ import Link from 'next/link';
 import ImageCarousel from '@/components/ImageCarousel';
 import ProductFinder from '@/components/ProductFinder';
 import SessionErrorModal from '@/components/SessionErrorModal';
-import { clearSessionToken } from '@/lib/sessionStorage';
+import { clearSessionToken, getSessionToken } from '@/lib/sessionStorage';
 
 export default function ProductPageClient({ catalogue, sessionError: initialError }) {
   const [sessionError, setSessionError] = useState(initialError || null);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const sessionToken = getSessionToken();
+  const backHref = sessionToken ? `/?session=${sessionToken}` : '/';
 
   useEffect(() => {
     if (initialError) {
@@ -37,7 +39,7 @@ export default function ProductPageClient({ catalogue, sessionError: initialErro
               View Error Details
             </button>
             <div>
-              <Link href="/" className="text-blue-600 hover:text-blue-500 underline">
+              <Link href={backHref} className="text-blue-600 hover:text-blue-500 underline">
                 ← Back to Catalogue
               </Link>
             </div>
@@ -52,7 +54,7 @@ export default function ProductPageClient({ catalogue, sessionError: initialErro
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Product not found</h2>
-          <Link href="/" className="text-blue-600 hover:text-blue-500 underline">
+          <Link href={backHref} className="text-blue-600 hover:text-blue-500 underline">
             ← Back to Catalogue
           </Link>
         </div>
@@ -93,7 +95,7 @@ export default function ProductPageClient({ catalogue, sessionError: initialErro
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-6">
-          <Link href="/" className="text-red-600 hover:text-red-500 inline-flex items-center mb-4">
+          <Link href={backHref} className="text-red-600 hover:text-red-500 inline-flex items-center mb-4">
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
@@ -181,6 +183,12 @@ export default function ProductPageClient({ catalogue, sessionError: initialErro
     </div>
   );
 }
+
+
+
+
+
+
 
 
 

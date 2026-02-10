@@ -97,7 +97,7 @@ export default function HomeClient({ initialCatalogues, sessionToken: initialSes
                 <p className="mt-2 text-gray-600">Our most popular and recommended body types</p>
               </div>
             </div>
-            <CatalogueGrid catalogues={featuredFilteredProducts} />
+            <CatalogueGrid catalogues={featuredFilteredProducts} sessionToken={initialSessionToken} />
           </div>
         )}
 
@@ -115,7 +115,7 @@ export default function HomeClient({ initialCatalogues, sessionToken: initialSes
                 </div>
               </div>
             )}
-            <CatalogueGrid catalogues={allFilteredCatalogues} />
+            <CatalogueGrid catalogues={allFilteredCatalogues} sessionToken={initialSessionToken} />
             
             {/* Other Gallery Link Section - Only show when not searching */}
             {!searchTerm && (

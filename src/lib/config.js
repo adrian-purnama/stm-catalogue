@@ -9,6 +9,7 @@
 // API URL - accessible on both client and server
 // NEXT_PUBLIC_ prefix makes it available in the browser
 export const API_URL = 'https://be-stm-portal.stm-asb.co.id/api';
+// export const API_URL = 'http://localhost:5000/api';
 
 // Other environment variables can be added here as needed
 export const config = {
